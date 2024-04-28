@@ -1,0 +1,21 @@
+market-categories:
+  SPAWNERS:
+    icon: '52:0'
+    products:
+      - '52:0'
+  TOOLS:
+    icon: '278:0'
+    products:
+      -
+  ORES:
+    icon: '264:0'
+    products:
+      -
+  POTIONS:
+    icon: '373:0'
+    products:
+      -
+  OTHER:
+    icon: '2:0'
+    products:
+      -

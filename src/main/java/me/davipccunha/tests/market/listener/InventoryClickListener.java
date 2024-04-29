@@ -140,13 +140,9 @@ public class InventoryClickListener implements Listener {
                 final String serializedItemToDelete = NBTHandler.getNBT(clickedItem, "product");
                 if (serializedItemToDelete == null) return;
 
-                final MarketProduct productToDelete = MarketUtils.extractProductInfo(serializedItemToDelete);
+                final MarketProduct productToRemove = MarketUtils.extractProductInfo(serializedItemToDelete);
 
-                plugin.getGlobalMarket().removeProduct(productToDelete);
-
-                // TODO: Removed items should be given back to the player. This will require a new plugin "Postman" that stores items for players
-
-                player.sendMessage("§aVocê removeu seu item do mercado com sucesso.");
+                this.handleGlobalMarketRemoval(player, productToRemove);
 
                 player.openInventory(MarketGUIFactory.createFilteredMarketGUI(this.plugin.getGlobalMarket(), player.getName()));
 
@@ -192,11 +188,27 @@ public class InventoryClickListener implements Listener {
         return true;
     }
 
+    private void handleGlobalMarketRemoval(Player player, MarketProduct product) {
+        final int missingAmount = InventoryUtil.getMissingAmount(player.getInventory(), product.getItemStack());
+        if (missingAmount < product.getItemStack().getAmount()) {
+            player.sendMessage("§cVocê não tem espaço suficiente no inventário para remover este item.");
+            return;
+        }
+
+        plugin.getGlobalMarket().removeProduct(product);
+        player.getInventory().addItem(product.getItemStack());
+        player.sendMessage("§aVocê removeu um item do mercado.");
+    }
+
     private void handlePrivateMarketRemoval(Player player, MarketProduct product) {
         final RedisCache<PersonalMarket> personalMarketCache = this.plugin.getPersonalMarketCache();
         final PersonalMarket personalMarket = personalMarketCache.get(player.getName());
 
-        // TODO: Removed items should be given back to the seller. This will require a new plugin "Postman" that stores items for players
+        // Removed items should be given back to the player, but since it depends on the seller being online and having space in their inventory, we use the mailman API
+        plugin.getMailmanAPI().addItem(player.getName(), product.getItemStack());
+        final Player seller = plugin.getServer().getPlayer(product.getOwner());
+        if (seller != null)
+            seller.sendMessage(String.format("§aUm item seu foi removido do mercado pessoal de §f%s §ae enviado para seu correio.", player.getName()));
 
         personalMarket.removeProduct(product);
         personalMarketCache.add(player.getName(), personalMarket);

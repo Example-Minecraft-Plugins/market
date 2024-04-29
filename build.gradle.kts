@@ -24,6 +24,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.32")
     compileOnly(fileTree("D:\\Local Minecraft Server\\plugins") { include("bukkit-utils.jar") })
     compileOnly(fileTree("D:\\Minecraft Dev\\artifacts\\") { include("economy-api.jar") })
+    compileOnly(fileTree("D:\\Minecraft Dev\\artifacts\\") { include("mailman-api.jar") })
 }
 
 tasks.withType<JavaCompile> {
@@ -46,6 +47,7 @@ bukkit {
     version = "${project.version}"
     main = "me.davipccunha.tests.market.MarketPlugin"
     depend = listOf("bukkit-utils", "economy")
+    softDepend = listOf("mailman")
     description = "Plugin that allows players to post items for sale."
     author = "Davi C"
 

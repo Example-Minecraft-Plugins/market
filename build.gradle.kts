@@ -53,8 +53,7 @@ bukkit {
 
     commands {
         register("mercado") {
-            description = "Opens up the main market GUI."
-            permission = "market.command"
+            description = "Abre o menu principal do mercado"
         }
     }
 }

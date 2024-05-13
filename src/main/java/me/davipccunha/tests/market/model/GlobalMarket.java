@@ -62,7 +62,7 @@ public class GlobalMarket {
 
     private void loadCategories(FileConfiguration config) {
         for (String key : config.getConfigurationSection("market-categories").getKeys(false)) {
-            GlobalMarketCategory category = MarketCategoryFactory.createCategory(config, key);
+            final GlobalMarketCategory category = MarketCategoryFactory.createCategory(config, key);
             categories.add(category);
         }
     }

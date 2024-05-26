@@ -57,7 +57,7 @@ public class AnunciarSubCommand implements MercadoSubCommand {
         final MarketProduct product = new MarketProduct(player.getName(), serializedItem, category, price);
 
         player.getInventory().remove(item);
-        this.plugin.getGlobalMarket().addProduct(product);
+        this.plugin.getGlobalMarket().addProduct(product, true);
 
         player.sendMessage("§aSeu item foi anunciado no mercado com sucesso.");
 
@@ -71,7 +71,6 @@ public class AnunciarSubCommand implements MercadoSubCommand {
             personalMarket = new PersonalMarket(target.getName());
             cache.add(target.getName().toLowerCase(), personalMarket);
         }
-
 
         // TODO: Currently limiting the number of products because market is single paged
         if (personalMarket.getProducts().size() > 36) {

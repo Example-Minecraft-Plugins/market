@@ -22,15 +22,6 @@ public class MarketProduct {
     }
 
     @Override
-    public String toString() {
-        return "MarketProduct{" +
-                "owner='" + owner + '\'' +
-                ", category=" + category +
-                ", price=" + price +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object other) {
         if (this == other) return true;
         if (!(other instanceof MarketProduct)) return false;

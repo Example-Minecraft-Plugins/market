@@ -28,6 +28,7 @@ public class MarketPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        this.saveGlobalMarket();
         getLogger().info("Market plugin disabled!");
     }
 
@@ -55,8 +56,13 @@ public class MarketPlugin extends JavaPlugin {
     private void load() {
         this.economyAPI = Bukkit.getServicesManager().load(EconomyAPI.class);
         this.mailmanAPI = Bukkit.getServicesManager().load(MailmanAPI.class);
-
         this.globalMarket = new GlobalMarket(getConfig());
+
+        this.globalMarket.loadFromRedis(getConfig());
         this.personalMarketCache = new RedisCache<>("market:personal-market", PersonalMarket.class);
+    }
+
+    private void saveGlobalMarket() {
+        this.globalMarket.saveToRedis();
     }
 }
